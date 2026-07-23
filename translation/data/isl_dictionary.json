@@ -1,0 +1,46 @@
+{
+  "version": "1.0.0",
+  "description": "Indian Sign Language to English dictionary",
+  "gestures": {
+    "hello": {
+      "text": "Hello",
+      "category": "greeting"
+    },
+    "thank_you": {
+      "text": "Thank you",
+      "category": "courtesy"
+    },
+    "please": {
+      "text": "Please",
+      "category": "courtesy"
+    },
+    "yes": {
+      "text": "Yes",
+      "category": "response"
+    },
+    "no": {
+      "text": "No",
+      "category": "response"
+    },
+    "good": {
+      "text": "Good",
+      "category": "adjective"
+    },
+    "bad": {
+      "text": "Bad",
+      "category": "adjective"
+    },
+    "help": {
+      "text": "Help",
+      "category": "request"
+    },
+    "sorry": {
+      "text": "Sorry",
+      "category": "courtesy"
+    },
+    "name": {
+      "text": "Name",
+      "category": "question"
+    }
+  }
+}

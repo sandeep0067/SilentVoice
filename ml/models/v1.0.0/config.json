@@ -1,0 +1,18 @@
+{
+  "model_version": "1.0.0",
+  "architecture": "CNN-LSTM",
+  "input_shape": [30, 63],
+  "num_classes": 26,
+  "sequence_length": 30,
+  "landmark_dim": 63,
+  "cnn_filters": [64, 128, 256],
+  "lstm_hidden_size": 128,
+  "lstm_num_layers": 2,
+  "dropout": 0.5,
+  "training": {
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "epochs": 100,
+    "optimizer": "adam"
+  }
+}

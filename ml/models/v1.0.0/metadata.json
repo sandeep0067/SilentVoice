@@ -1,0 +1,9 @@
+{
+  "model_version": "1.0.0",
+  "created_at": "2024-01-23T00:00:00Z",
+  "training_dataset": "ISL-Basic-v1",
+  "training_duration": "4h 30m",
+  "gpu_used": "NVIDIA T4",
+  "framework": "PyTorch 2.3.1",
+  "description": "Initial CNN-LSTM model for ISL gesture recognition"
+}

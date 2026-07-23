@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "description": "Grammar rules for ISL to English translation",
+  "rules": [
+    {
+      "name": "subject_verb_object",
+      "pattern": "subject verb object",
+      "description": "Standard SVO sentence structure"
+    },
+    {
+      "name": "question_formation",
+      "pattern": "question_word subject verb",
+      "description": "Question formation pattern"
+    },
+    {
+      "name": "greeting_response",
+      "pattern": "greeting response",
+      "description": "Greeting and response pattern"
+    }
+  ]
+}

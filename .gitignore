@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Frontend
+frontend/dist/
+frontend/.vite/
+frontend/.eslintcache
+
+# ML
+ml/datasets/raw/*
+!ml/datasets/raw/.gitkeep
+ml/models/*.pth
+ml/models/*/model.pth
+ml/experiments/runs/*
+!ml/experiments/runs/.gitkeep
+*.ipynb_checkpoints
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+*.out
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Docker
+.dockerignore
+
+# OS
+Thumbs.db
