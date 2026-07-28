@@ -11,17 +11,29 @@ ENV/
 .venv
 
 # Frontend
-frontend/dist/
-frontend/.vite/
-frontend/.eslintcache
+web/dist/
+web/.vite/
+web/.eslintcache
+web/node_modules/
 
 # ML
 ml/datasets/raw/*
 !ml/datasets/raw/.gitkeep
+ml/datasets/processed/*
+!ml/datasets/processed/.gitkeep
+ml/datasets/augmented/*
+!ml/datasets/augmented/.gitkeep
+ml/models/checkpoints/*
+!ml/models/checkpoints/.gitkeep
+ml/models/logs/*
+!ml/models/logs/.gitkeep
 ml/models/*.pth
 ml/models/*/model.pth
+ml/models/*.pt
 ml/experiments/runs/*
 !ml/experiments/runs/.gitkeep
+ml/experiments/results/*
+!ml/experiments/results/.gitkeep
 *.ipynb_checkpoints
 
 # Environment
@@ -41,6 +53,8 @@ ml/experiments/runs/*
 *.log
 logs/
 *.out
+ml/models/training.log
+ml/models/evaluation.log
 
 # Testing
 .coverage
@@ -58,3 +72,6 @@ dist/
 
 # OS
 Thumbs.db
+
+# Profile results
+profile_results.json
