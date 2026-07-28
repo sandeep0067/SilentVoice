@@ -1,0 +1,9 @@
+Metric,Frame_Count
+Mean Frames,89.86
+Std Frames,31.40
+Median Frames,91.00
+Min Frames,36
+Max Frames,144
+25th Percentile,63.00
+75th Percentile,117.00
+Total Frames,69193

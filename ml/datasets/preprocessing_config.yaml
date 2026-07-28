@@ -1,0 +1,50 @@
+# Video Preprocessing Configuration
+
+video_preprocessing:
+  # Quality filters
+  min_duration: 1.0  # Minimum video duration in seconds
+  max_duration: 5.0  # Maximum video duration in seconds
+  min_fps: 24.0      # Minimum frames per second
+  min_resolution: [640, 480]  # Minimum resolution [width, height]
+  
+  # Target parameters
+  target_fps: 30.0   # Target FPS for resampling
+  target_size: null  # Target size [width, height], null to keep original
+  
+  # Frame enhancement
+  enhance_frames: true
+  normalize_frames: true
+  
+  # Frame extraction
+  skip_duplicates: true
+  duplicate_threshold: 0.95
+
+quality_filtering:
+  # Brightness thresholds (0-255)
+  min_brightness: 50.0
+  max_brightness: 200.0
+  
+  # Contrast threshold
+  min_contrast: 30.0
+  
+  # Blur score (lower is sharper)
+  max_blur_score: 100.0
+  
+  # Motion score (higher is more motion)
+  min_motion_score: 10.0
+  
+  # Minimum quality level to accept
+  min_quality_level: "medium"  # high, medium, low
+
+output:
+  # Output directories
+  processed_frames_dir: "ml/datasets/processed/frames"
+  quality_reports_dir: "ml/datasets/processed/quality_reports"
+  
+  # File naming
+  frame_prefix: "frame"
+  frame_format: "png"  # png, jpg
+  
+  # Compression
+  jpeg_quality: 95
+  png_compression: 6

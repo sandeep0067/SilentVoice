@@ -1,0 +1,10 @@
+Metric,Value
+Total Classes,25
+Total Samples,770
+Min Samples per Class,15
+Max Samples per Class,45
+Mean Samples per Class,30.80
+Median Samples per Class,32.00
+Std Dev Samples per Class,8.40
+Imbalance Ratio (Max/Min),3.00
+Gini Inequality Coefficient,0.1559

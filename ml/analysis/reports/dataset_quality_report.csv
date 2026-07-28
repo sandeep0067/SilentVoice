@@ -1,0 +1,11 @@
+Category,Metric,Value,Status
+Sample Integrity,Total Videos,770,INFO
+Sample Integrity,Valid Videos,770,PASS
+Sample Integrity,Invalid Videos,0,PASS
+Sample Integrity,Valid Ratio,100.00%,PASS
+Resolution,Resolution_1920x1080,395,INFO
+Resolution,Resolution_1280x720,375,INFO
+FPS,FPS_30.0,770,INFO
+Quality Grade,Grade_medium,330,INFO
+Quality Grade,Grade_high,399,INFO
+Quality Grade,Grade_low,41,INFO

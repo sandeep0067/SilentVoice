@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Metadata schema for INCLUDE ISL dataset",
+  "fields": {
+    "video_id": {
+      "type": "string",
+      "description": "Unique identifier for the video",
+      "format": "subject_gesture_number (e.g., 001_hello_001)"
+    },
+    "gesture": {
+      "type": "string",
+      "description": "Name of the gesture performed",
+      "examples": ["hello", "thank_you", "please", "yes", "no"]
+    },
+    "subject": {
+      "type": "string",
+      "description": "Subject identifier",
+      "format": "three-digit number (e.g., 001)"
+    },
+    "video_path": {
+      "type": "string",
+      "description": "Relative path to video file from dataset root",
+      "format": "raw/videos/{split}/{gesture}/{filename}"
+    },
+    "duration": {
+      "type": "float",
+      "description": "Video duration in seconds",
+      "range": [1.0, 5.0]
+    },
+    "frame_count": {
+      "type": "integer",
+      "description": "Total number of frames in video",
+      "minimum": 24
+    },
+    "fps": {
+      "type": "float",
+      "description": "Frames per second",
+      "minimum": 24.0
+    },
+    "resolution": {
+      "type": "string",
+      "description": "Video resolution as WIDTHxHEIGHT",
+      "format": "WIDTHxHEIGHT (e.g., 640x480)",
+      "minimum_resolution": "640x480"
+    },
+    "quality": {
+      "type": "string",
+      "description": "Video quality assessment",
+      "enum": ["high", "medium", "low"]
+    },
+    "lighting_condition": {
+      "type": "string",
+      "description": "Lighting condition during recording",
+      "enum": ["uniform", "variable", "low_light", "bright"]
+    },
+    "background": {
+      "type": "string",
+      "description": "Background complexity",
+      "enum": ["plain", "moderate", "complex"]
+    },
+    "created_at": {
+      "type": "string",
+      "description": "Timestamp when metadata was created",
+      "format": "ISO 8601 datetime"
+    }
+  },
+  "constraints": {
+    "required_fields": [
+      "video_id",
+      "gesture",
+      "subject",
+      "video_path",
+      "duration",
+      "frame_count",
+      "fps",
+      "resolution"
+    ],
+    "unique_fields": ["video_id"],
+    "subject_based_split": "train/val/test splits should be subject-based to prevent data leakage"
+  }
+}

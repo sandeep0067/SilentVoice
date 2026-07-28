@@ -1,0 +1,9 @@
+Metric,Duration_Seconds
+Mean Duration,3.00
+Std Duration,1.05
+Median Duration,3.02
+Min Duration,1.20
+Max Duration,4.80
+25th Percentile,2.11
+75th Percentile,3.90
+Total Hours,0.641
