@@ -14,7 +14,7 @@ import json
 from ml.datasets.metadata_manager import MetadataManager, VideoMetadata
 from ml.datasets.dataset_validator import DatasetValidator
 from ml.datasets.video_preprocessor import VideoPreprocessor
-from ml.datasets.frame_extractor import FrameExtractor, FrameExtractionConfig
+from ml.datasets.frame_extractor import FrameExtractor, FrameExtractionConfig, FrameExtractionConfig
 from ml.datasets.quality_filter import QualityFilter
 from ml.inference.processors.landmark_extractor import LandmarkExtractor, LandmarkExtractionConfig
 from ml.inference.processors.sequence_builder import SequenceBuilder, SequenceBuilderConfig
@@ -204,7 +204,7 @@ class PreprocessingPipeline:
             
             # Extract frames
             print(f"Extracting frames from {video_id}...")
-            frame_extractor = FrameExtractor()
+            frame_extractor = FrameExtractor(FrameExtractionConfig(normalize=False))
             try:
                 frames = frame_extractor.extract_frames(str(video_path))
             except Exception as e:

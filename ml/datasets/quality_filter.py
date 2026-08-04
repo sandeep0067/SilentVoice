@@ -36,11 +36,11 @@ class QualityFilter:
     
     def __init__(
         self,
-        min_brightness: float = 50.0,
-        max_brightness: float = 200.0,
-        min_contrast: float = 30.0,
+        min_brightness: float = 30.0,
+        max_brightness: float = 230.0,
+        min_contrast: float = 15.0,
         max_blur_score: float = 100.0,
-        min_motion_score: float = 10.0
+        min_motion_score: float = 0.5
     ):
         """
         Initialize quality filter.
@@ -176,7 +176,7 @@ class QualityFilter:
         if contrast < self.min_contrast:
             issues.append("contrast")
         
-        if blur_score < 50:  # Too blurry
+        if blur_score < 15:  # Too blurry
             issues.append("blur")
         
         if motion_score < self.min_motion_score:
@@ -205,7 +205,7 @@ class QualityFilter:
             if metrics.overall_quality == "low":
                 return False, "Low overall quality", metrics
             
-            if metrics.blur_score < 50:
+            if metrics.blur_score < 15:
                 return False, "Too blurry", metrics
             
             if metrics.motion_score < self.min_motion_score:

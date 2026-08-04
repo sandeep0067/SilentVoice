@@ -58,26 +58,32 @@ def create_sample_metadata(dataset_root: str, output_path: str):
         subject = 'unknown'
         gesture = 'unknown'
         
-        # Heuristic: assume structure like INCLUDE/videos/subject_X/gesture_Y.mp4
-        if len(path_parts) >= 3:
-            subject = path_parts[-2] if 'subject' in path_parts[-2].lower() else path_parts[-2]
-            gesture = path_parts[-1].stem
+        # INCLUDE structure: Category/GestureName/video.mov
+        if len(path_parts) >= 2:
+            gesture = path_parts[-2]
+            subject = video_path.stem
         
         metadata.append({
             'video_id': f'{i:04d}',
             'video_path': str(rel_path),
             'subject': subject,
             'gesture': gesture,
-            'duration': 0.0,  # Will be filled during validation
-            'fps': 30.0,  # Default
-            'split': 'train'  # Will be reassigned during preprocessing
+            'duration': 0.0,
+            'frame_count': 0,
+            'fps': 30.0,
+            'resolution': '1920x1080',
+            'quality': 'good',
+            'lighting_condition': 'normal',
+            'background': 'plain',
+            'created_at': '2026-08-03T00:00:00',
+            'split': 'train'
         })
     
     # Write metadata CSV
     output_file.parent.mkdir(parents=True, exist_ok=True)
     
     with open(output_file, 'w', newline='') as f:
-        fieldnames = ['video_id', 'video_path', 'subject', 'gesture', 'duration', 'fps', 'split']
+        fieldnames = ['video_id', 'video_path', 'subject', 'gesture', 'duration', 'frame_count', 'fps', 'resolution', 'quality', 'lighting_condition', 'background', 'created_at', 'split']
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(metadata)
