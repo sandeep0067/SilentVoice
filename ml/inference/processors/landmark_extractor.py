@@ -257,6 +257,10 @@ class LandmarkExtractor:
         if self.config.use_relative_coordinates:
             landmarks_array = self._make_relative(landmarks_array)
         
+        # Flatten per-frame landmarks (N_landmarks, 3) into a 1D feature vector
+        # so sequences stack cleanly as (T, D) for downstream augmentation/training
+        landmarks_array = landmarks_array.flatten()
+        
         return landmarks_array
     
     def _normalize_landmarks(self, landmarks: np.ndarray) -> np.ndarray:
