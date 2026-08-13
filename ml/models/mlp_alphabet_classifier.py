@@ -107,7 +107,7 @@ class AlphabetMLP(nn.Module):
                 nn.init.constant_(module.weight, 1)
                 nn.init.constant_(module.bias, 0)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, lengths=None) -> torch.Tensor:
         """
         Forward pass through the network.
 
