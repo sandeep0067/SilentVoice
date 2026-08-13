@@ -129,8 +129,8 @@ class AlphabetInferencePipeline:
             self.idx_to_label = checkpoint['label_mapping']
             self.label_to_idx = {v: k for k, v in self.idx_to_label.items()}
         else:
-            # Default A-Z + SPACE + DELETE + NOTHING
-            default_labels = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ') + ['SPACE', 'DELETE', 'NOTHING']
+            # Actual training order: sorted(set(labels)) -> A-Z, del, nothing, space
+            default_labels = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ') + ['del', 'nothing', 'space']
             self.idx_to_label = {i: label for i, label in enumerate(default_labels)}
             self.label_to_idx = {label: i for i, label in self.idx_to_label.items()}
         
