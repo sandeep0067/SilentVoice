@@ -203,22 +203,34 @@ class ASLAlphabetPreprocessor:
         """
         logger.info(f"Processing {split_name} split...")
         
+        import time
         all_landmarks = []
         all_labels = []
         all_paths = []
         
-        for class_name, images in split_images.items():
-            for image_path in images:
-                landmarks = self.extract_landmarks(image_path)
-                
-                if landmarks is not None:
-                    all_landmarks.append(landmarks)
-                    all_labels.append(class_name)
-                    all_paths.append(str(image_path))
-                    self.stats['processed_images'] += 1
-                else:
-                    self.stats['skipped_images'] += 1
-                    logger.debug(f"Skipped {image_path}: no hand detected")
+        flat_items = [(cn, ip) for cn, imgs in split_images.items() for ip in imgs]
+        total_items = len(flat_items)
+        start_time = time.time()
+        log_every = max(1, total_items // 50)
+        
+        for idx, (class_name, image_path) in enumerate(flat_items, 1):
+            landmarks = self.extract_landmarks(image_path)
+            
+            if landmarks is not None:
+                all_landmarks.append(landmarks)
+                all_labels.append(class_name)
+                all_paths.append(str(image_path))
+                self.stats['processed_images'] += 1
+            else:
+                self.stats['skipped_images'] += 1
+                logger.debug(f"Skipped {image_path}: no hand detected")
+            
+            if idx % log_every == 0 or idx == total_items:
+                elapsed = time.time() - start_time
+                rate = idx / elapsed if elapsed > 0 else 0
+                pct = 100 * idx / total_items
+                eta_sec = (total_items - idx) / rate if rate > 0 else 0
+                logger.info(f"[{split_name}] {idx}/{total_items} ({pct:.1f}%) - {rate:.1f} img/s - ETA {eta_sec/60:.1f} min")
         
         if all_landmarks:
             landmarks_array = np.stack(all_landmarks, axis=0)
