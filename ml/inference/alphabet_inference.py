@@ -110,7 +110,7 @@ class AlphabetInferencePipeline:
         
         # Load model config
         if config_path.exists():
-            model_config = AlphabetMLPConfig.load_config(config_path)
+            model_config = AlphabetMLP.load_config(config_path)
         else:
             logger.warning(f"Config file not found: {config_path}, using defaults")
             model_config = AlphabetMLPConfig()
