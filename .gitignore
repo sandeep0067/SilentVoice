@@ -36,6 +36,16 @@ ml/experiments/results/*
 !ml/experiments/results/.gitkeep
 *.ipynb_checkpoints
 
+# ASL Inference Project
+asl_inference_project/venv/
+asl_inference_project/__pycache__/
+asl_inference_project/*.pt
+asl_inference_project/*.task
+asl_inference_project/models/*.pt
+best_model.pt
+hand_landmarker.task
+model_config.json
+
 # Environment
 .env
 .env.local
