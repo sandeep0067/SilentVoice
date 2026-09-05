@@ -1,3 +1,0 @@
-# Translation module dependencies
-# No external dependencies required for basic dictionary-based translation
-# Will be expanded if NLP processing is added

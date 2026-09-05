@@ -69,29 +69,27 @@ def load_trained_model(checkpoint_path: str, config_path: str, device: torch.dev
     return model, label_mapping
 
 
-def draw_prediction_on_frame(frame, predicted_label, confidence_score, hand_detected, sentence_buffer="", stability_progress=0.0, is_speaking=False, word_stats=None):
+def draw_prediction_on_frame(frame, predicted_label, confidence_score, hand_detected, sentence_buffer="", stability_progress=0.0, is_speaking=False):
     """
-    Draw prediction results with minimal professional UI.
-    
-    Clean, productive interface without excessive decorations.
+    Draw prediction results on frame.
     """
     annotated = frame.copy()
     
-    # Minimal header bar
+    # Header bar
     cv2.rectangle(annotated, (0, 0), (frame.shape[1], 70), (30, 30, 35), -1)
     
     if hand_detected:
-        # Clean letter display
+        # Display predicted letter
         cv2.putText(annotated, predicted_label, (20, 45),
                    cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 200, 100), 2)
         
-        # Minimal confidence indicator
+        # Display confidence
         conf_pct = int(confidence_score * 100)
         conf_color = (0, 200, 100) if confidence_score > 0.7 else (200, 180, 50)
         cv2.putText(annotated, f"{conf_pct}%", (100, 45),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, conf_color, 2)
         
-        # Minimal stability bar
+        # Stability bar
         if stability_progress > 0:
             bar_width = 100
             bar_height = 4
@@ -104,25 +102,23 @@ def draw_prediction_on_frame(frame, predicted_label, confidence_score, hand_dete
         cv2.putText(annotated, "No hand", (20, 45),
                    cv2.FONT_HERSHEY_SIMPLEX, 1.0, (150, 150, 150), 2)
     
-    # Clean sentence display at bottom
+    # Sentence display at bottom
     if sentence_buffer:
         cv2.rectangle(annotated, (0, frame.shape[0] - 50), (frame.shape[1], frame.shape[0]), (30, 30, 35), -1)
         
-        # Display sentence (truncate if too long)
+        # Display sentence
         display_text = sentence_buffer if len(sentence_buffer) <= 40 else sentence_buffer[-40:]
         cv2.putText(annotated, display_text, (20, frame.shape[0] - 15),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (220, 220, 220), 2)
         
-        # Minimal controls hint
+        # Controls hint
         controls = "[s] Speak  [c] Clear  [q] Quit"
         cv2.putText(annotated, controls, (frame.shape[1] - 280, frame.shape[0] - 15),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (150, 180, 200), 1)
     
-    # Minimal speaking indicator
+    # Speaking indicator
     if is_speaking:
         cv2.circle(annotated, (frame.shape[1] - 30, 35), 8, (0, 200, 100), -1)
-        cv2.putText(annotated, "●", (frame.shape[1] - 38, 40),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 200, 100), 2)
     
     return annotated
 
@@ -138,15 +134,8 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
     
-    # Paths - try to use sentence-optimized model first
-    sentence_optimized_path = 'models/best_model_sentence_optimized.pt'
-    if Path(sentence_optimized_path).exists():
-        checkpoint_path = sentence_optimized_path
-        print("Using sentence-optimized model")
-    else:
-        checkpoint_path = '../best_model.pt'
-        print("Using base model")
-    
+    # Model paths
+    checkpoint_path = '../best_model.pt'
     config_path = '../model_config.json'
     
     # Load model
@@ -156,16 +145,13 @@ def main():
     print("Initializing MediaPipe Hands...")
     landmark_extractor = HandLandmarkExtractor()
     
-    # Initialize word builder with sentence-optimized settings
-    stability_frames = 4  # Slightly faster for sentence building
-    confidence_threshold = 0.65  # Slightly lower for better letter detection
-    print(f"Initializing WordBuilder (stability_frames={stability_frames}, confidence_threshold={confidence_threshold})")
-    word_builder = WordBuilder(stability_frames=stability_frames, confidence_threshold=confidence_threshold)
+    # Initialize word builder
+    word_builder = WordBuilder(stability_frames=4, confidence_threshold=0.65)
+    print("Initializing WordBuilder")
     
     # Initialize TTS handler
-    clear_after_speaking = False
+    tts_handler = TTSHandler(clear_after_speaking=False)
     print("Initializing TTS Handler")
-    tts_handler = TTSHandler(clear_after_speaking=clear_after_speaking)
     
     # Initialize webcam
     print("Initializing webcam...")
@@ -197,12 +183,11 @@ def main():
             confidence_score = 0.0
             hand_detected = landmarks is not None
             sentence_buffer = word_builder.get_sentence()
+            stability_progress = 0.0
             
             if hand_detected:
-                # Convert landmarks to tensor and add batch dimension
-                # Handle single hand or multiple hands
+                # Convert landmarks to tensor
                 if isinstance(landmarks, list):
-                    # Use the first hand detected
                     landmarks_array = np.array(landmarks[0], dtype=np.float32)
                 else:
                     landmarks_array = np.array(landmarks, dtype=np.float32)
@@ -224,25 +209,17 @@ def main():
                 confidence_score = confidence.item()
                 predicted_label = label_mapping.get(predicted_class, f"Class_{predicted_class}")
                 
-                # Update word builder with prediction
-                sentence_buffer_before = sentence_buffer
+                # Update word builder
                 sentence_buffer, letter_confirmed = word_builder.update(predicted_label, confidence_score)
-                
-                # Get stability progress for visualization
                 stability_progress = word_builder.get_stability_progress()
                 
-                # Draw landmarks on frame
+                # Draw landmarks
                 frame = landmark_extractor.draw_landmarks(frame, results)
-            else:
-                # No hand detected - get current sentence buffer without updating
-                sentence_buffer = word_builder.get_sentence()
-                stability_progress = 0.0
             
             # Draw prediction on frame
             is_speaking = tts_handler.is_speaking()
-            word_stats = word_builder.get_stats()
             annotated_frame = draw_prediction_on_frame(frame, predicted_label, confidence_score, hand_detected, 
-                                                      sentence_buffer, stability_progress, is_speaking, word_stats)
+                                                      sentence_buffer, stability_progress, is_speaking)
             
             # Display frame
             cv2.imshow('ASL Alphabet Recognition', annotated_frame)
@@ -256,18 +233,10 @@ def main():
                 print("Clearing sentence")
                 word_builder.clear()
             elif key == ord('s'):
-                # Speak the current sentence (manual trigger)
                 current_sentence = word_builder.get_sentence().strip()
                 if current_sentence:
-                    print(f"Manual speaking: '{current_sentence}'")
-                    success = tts_handler.speak(current_sentence)
-                    if success:
-                        print("Speech queued successfully")
-                    else:
-                        print("Failed to queue speech")
-                    if tts_handler.clear_after_speaking:
-                        print("Auto-clearing sentence after speaking")
-                        word_builder.clear()
+                    print(f"Speaking: '{current_sentence}'")
+                    tts_handler.speak(current_sentence)
                 else:
                     print("Sentence is empty, nothing to speak")
                 

@@ -8,7 +8,6 @@ to avoid blocking the main inference loop during speech playback.
 import threading
 import queue
 import pyttsx3
-from typing import Optional
 
 
 class TTSHandler:
@@ -34,19 +33,8 @@ class TTSHandler:
         # Initialize pyttsx3 engine
         try:
             self.engine = pyttsx3.init()
-            # Configure voice properties
-            voices = self.engine.getProperty('voices')
-            if voices:
-                # Try to use a female voice if available (often clearer for TTS)
-                for voice in voices:
-                    if 'female' in voice.name.lower():
-                        self.engine.setProperty('voice', voice.id)
-                        break
-            
-            # Set speech rate (adjustable)
-            self.engine.setProperty('rate', 150)  # Words per minute
-            self.engine.setProperty('volume', 0.9)  # Volume level (0-1)
-            
+            self.engine.setProperty('rate', 150)
+            self.engine.setProperty('volume', 0.9)
             print("TTS engine initialized successfully")
         except Exception as e:
             print(f"Warning: Could not initialize TTS engine: {e}")
@@ -126,37 +114,5 @@ class TTSHandler:
         self.stop()
 
 
-def test_tts():
-    """Test the TTS handler."""
-    print("Testing TTS Handler")
-    print("=" * 50)
-    
-    try:
-        tts = TTSHandler(clear_after_speaking=False)
-        
-        if tts.engine:
-            print("TTS engine available")
-            print("Speaking test message...")
-            tts.speak("Hello, this is a test of the text to speech system.")
-            
-            # Wait for speech to complete
-            import time
-            while tts.is_speaking():
-                print("Speaking...")
-                time.sleep(0.5)
-            
-            print("Speech completed")
-            tts.stop()
-        else:
-            print("TTS engine not available - install pyttsx3 first")
-            print("Run: pip install pyttsx3")
-        
-        print("=" * 50)
-    except ImportError as e:
-        print(f"Import error: {e}")
-        print("Please install pyttsx3 first: pip install pyttsx3")
-        print("=" * 50)
-
-
 if __name__ == '__main__':
-    test_tts()
+    print("TTS Handler module loaded successfully")
